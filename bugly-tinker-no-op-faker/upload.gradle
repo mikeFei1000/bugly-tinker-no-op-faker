@@ -6,7 +6,7 @@ version = "1.0.0" //版本
 // 定义相关网站
 def siteUrl = 'https://github.com/mikeFei1000/bugly-tinker-no-op-faker'  // 项目的主页
 def gitUrl = 'https://github.com/mikeFei1000/bugly-tinker-no-op-faker.git'   // Git仓库的url
-group = "com.mikefei.project.bugly-tinker-no-op-faker"                          // Maven Group ID for the artifact，一般填你唯一的包名
+group = "com.mikefei.project"                          // Maven Group ID for the artifact，一般填你唯一的包名
 
 install {
     repositories.mavenInstaller {
