@@ -1,0 +1,82 @@
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+version = "1.0.0" //版本
+
+// 定义相关网站
+def siteUrl = 'https://github.com/mikeFei1000/bugly-tinker-no-op-faker'  // 项目的主页
+def gitUrl = 'https://github.com/mikeFei1000/bugly-tinker-no-op-faker.git'   // Git仓库的url
+group = "com.mikefei.project.bugly-tinker-no-op-faker"                          // Maven Group ID for the artifact，一般填你唯一的包名
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+                name 'Android Library'//项目描述
+                url siteUrl
+
+                //用apache2.0
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                //开发者基本信息
+                developers {
+                    developer {
+                        id 'mikefei'
+                        name 'mikefei'
+                        email 'mikefei1000@google.com'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+// 生成jarDoc的task，不需要修改。
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    // destinationDir = file("../javadoc/")
+    failOnError false // 忽略注释语法错误，如果用jdk1.8你的注释写的不规范就编译不过。
+}
+
+// 生成javaDoc的jar，不需要修改。
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    //archives javadocJar
+    archives sourcesJar
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+    configurations = ['archives']
+    pkg {
+        repo = "bugly-tinker-no-op-faker"
+        name = "bugly-tinker-no-op-faker"    //发布到JCenter上的项目名字
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["Apache-2.0"]
+        publish = true
+    }
+}

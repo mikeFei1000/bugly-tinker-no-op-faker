@@ -1,0 +1,2 @@
+include ':app', ':bugly-tinker-no-op-faker'
+rootProject.name='bugly-tinker-no-op'
